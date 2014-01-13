@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 
-namespace TravelerLeafletMap
+namespace LeafletRouting
 {
 	/// <summary>
 	/// Summary description for GetAlerts

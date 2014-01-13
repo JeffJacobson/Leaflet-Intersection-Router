@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TravelerLeafletMap</RootNamespace>
-    <AssemblyName>TravelerLeafletMap</AssemblyName>
+    <RootNamespace>LeafletRouting</RootNamespace>
+    <AssemblyName>LeafletRouting</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -43,41 +43,13 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="images\icons\alert\AccidentAlert1.png" />
-    <Content Include="images\icons\alert\AccidentAlert2.png" />
-    <Content Include="images\icons\alert\AccidentAlert3.png" />
-    <Content Include="images\icons\alert\AccidentAlert4.png" />
-    <Content Include="images\icons\alert\AccidentAlert5.png" />
-    <Content Include="images\icons\alert\Construction1.png" />
-    <Content Include="images\icons\alert\Construction2.png" />
-    <Content Include="images\icons\alert\Construction3.png" />
-    <Content Include="images\icons\alert\Construction4.png" />
-    <Content Include="images\icons\alert\Construction5.png" />
-    <Content Include="images\icons\alert\RoadClosure.png" />
-    <Content Include="images\icons\alert\shadow.png" />
-    <Content Include="images\icons\alert\Weather1.png" />
-    <Content Include="images\icons\alert\Weather2.png" />
-    <Content Include="images\icons\alert\Weather3.png" />
-    <Content Include="images\icons\alert\Weather4.png" />
-    <Content Include="images\icons\alert\Weather5.png" />
-    <Content Include="images\icons\camera.png" />
     <Content Include="index.html" />
     <Content Include="LICENSE.txt" />
-    <Content Include="Scripts\alertUtils.js" />
-    <Content Include="Scripts\index.min.js" />
-    <Content Include="Scripts\Leaflet.markercluster\dist\leaflet.markercluster.js" />
-    <Content Include="Scripts\Leaflet.markercluster\dist\MarkerCluster.css" />
-    <Content Include="Scripts\Leaflet.markercluster\dist\MarkerCluster.Default.css" />
-    <Content Include="Scripts\tasks\traffic_task.js" />
-    <Content Include="Scripts\tasks\task_common.min.js">
-      <DependentUpon>task_common.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\tasks\traffic_task.min.js">
-      <DependentUpon>traffic_task.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\index.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="images\" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -93,9 +65,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\tasks\task_common.js" />
-    <Content Include="Scripts\WsdotTraffic.js" />
-    <Content Include="Scripts\WsdotTraffic.min.js" />
     <None Include="Scripts\_references.js" />
     <Content Include="Styles\index.css" />
     <Content Include="Styles\index.min.css">
@@ -105,18 +74,6 @@
     <Content Include="README.md" />
     <Content Include="proxy.ashx" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
-    <Content Include="Scripts\index.min.js.map">
-      <DependentUpon>index.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\WsdotTraffic.min.js.map">
-      <DependentUpon>WsdotTraffic.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\tasks\task_common.min.js.map">
-      <DependentUpon>task_common.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\tasks\traffic_task.min.js.map">
-      <DependentUpon>traffic_task.js</DependentUpon>
-    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
