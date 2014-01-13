@@ -47,9 +47,7 @@
     <Content Include="LICENSE.txt" />
     <Content Include="Scripts\index.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="images\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -70,21 +68,8 @@
     <Content Include="Styles\index.min.css">
       <DependentUpon>index.css</DependentUpon>
     </Content>
-    <Content Include="Web.config" />
     <Content Include="README.md" />
-    <Content Include="proxy.ashx" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="proxy.ashx.cs">
-      <DependentUpon>proxy.ashx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
