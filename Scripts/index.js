@@ -82,6 +82,8 @@ require(["leaflet"], function (L) {
 		"OpenCycleMap Outdoors": ocmOutdoorsLayer
 	}).addTo(map);
 
+
+
 	/**
 	 * @typedef {Object} Event
 	 * @property {string} type - The event type (e.g., 'click')
@@ -96,11 +98,27 @@ require(["leaflet"], function (L) {
 	 * @property {DOMMouseEvent} originalEvent - The original DOM mouse event fired by the browser.
 	*/
 
+	/** Creates a URL for a reverse geocode request.
+	 * @param {LatLng} latlng - Leaflet LatLng value.
+	 * @param {number} [distance]
+	*/
+	function createReverseGeocodeRequestUrl(latlng, distance) {
+		var baseUrl = "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode";
+		var params = [];
+		params.push("location=" + encodeURIComponent([latlng.lng, latlng.lat].join(",")));
+		if (typeof distance === "number") {
+			params.push("distance=" + distance);
+		}
+		params.push("f=json");
+		params = params.join("&");
+		params = params;
+		return [baseUrl, params].join("?");
+	}
+
 	/** Handles the mouse click event.
 	 * @param {MouseEvent} e
 	*/
 	function handleMapClick(e) {
-		var baseUrl = "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode"
 		var req = new XMLHttpRequest();
 		req.onload = function () {
 			var result;
@@ -108,11 +126,8 @@ require(["leaflet"], function (L) {
 				result = JSON.parse(this.response);
 				console.log(result);
 			}
-		}
-		req.open("get", [baseUrl + "?", [
-				"location=" + encodeURIComponent([e.latlng.lng, e.latlng.lat].join(",")),
-				"f=json"].join("&")
-		].join(""));
+		};
+		req.open("get", createReverseGeocodeRequestUrl(e.latlng));
 		req.send();
 	}
 
