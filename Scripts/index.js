@@ -82,5 +82,27 @@ require(["leaflet"], function (L) {
 		"OpenCycleMap Outdoors": ocmOutdoorsLayer
 	}).addTo(map);
 
+	/**
+	 * @typedef {Object} Event
+	 * @property {string} type - The event type (e.g., 'click')
+	 * @property {Object} target - The object that fired the event.
+	*/
 
+	/**
+	 * @typedef {Event} MouseEvent
+	 * @property {LatLng} latLng - The geographical point where the mouse event occured.
+	 * @property {Point} layerPoint - Pixel coordinates of the point where the mouse event occured relative to the map layer.
+	 * @property {Point} containerPoint - Pixel coordinates of the point where the mouse event occured relative to the map container.
+	 * @property {DOMMouseEvent} originalEvent - The original DOM mouse event fired by the browser.
+	*/
+
+	/** Handles the mouse click event.
+	 * @param {MouseEvent} e
+	*/
+	function handleMapClick(e) {
+		console.log(e);
+	}
+
+	// Setup map on-click event.
+	map.on('click', handleMapClick);
 });
