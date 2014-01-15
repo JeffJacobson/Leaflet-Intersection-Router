@@ -90,7 +90,7 @@ require(["leaflet"], function (L) {
 
 	/**
 	 * @typedef {Event} MouseEvent
-	 * @property {LatLng} latLng - The geographical point where the mouse event occured.
+	 * @property {LatLng} latlng - The geographical point where the mouse event occured.
 	 * @property {Point} layerPoint - Pixel coordinates of the point where the mouse event occured relative to the map layer.
 	 * @property {Point} containerPoint - Pixel coordinates of the point where the mouse event occured relative to the map container.
 	 * @property {DOMMouseEvent} originalEvent - The original DOM mouse event fired by the browser.
@@ -100,7 +100,20 @@ require(["leaflet"], function (L) {
 	 * @param {MouseEvent} e
 	*/
 	function handleMapClick(e) {
-		console.log(e);
+		var baseUrl = "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode"
+		var req = new XMLHttpRequest();
+		req.onload = function () {
+			var result;
+			if (this.status === 200) {
+				result = JSON.parse(this.response);
+				console.log(result);
+			}
+		}
+		req.open("get", [baseUrl + "?", [
+				"location=" + encodeURIComponent([e.latlng.lng, e.latlng.lat].join(",")),
+				"f=json"].join("&")
+		].join(""));
+		req.send();
 	}
 
 	// Setup map on-click event.
