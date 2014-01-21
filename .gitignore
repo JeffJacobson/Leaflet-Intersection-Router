@@ -1,5 +1,6 @@
 Web.config
 Web.*.config
+packages
 Thumbs.db
 *.obj
 *.exe
