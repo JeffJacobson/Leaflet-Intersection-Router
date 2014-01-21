@@ -2,24 +2,3 @@
 	margin: 0;
 	height: 100%;
 }
-
-.leaflet-popup-content table {
-	font-size: xx-small;
-}
-
-.border-crossings-icon, .travel-times-icon {
-	background-color: white;
-	border: 1px solid black;
-	font-size: 1em;
-	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-	text-align: center;
-	padding: 0.1em 0.2em 0.5em 0.1em;
-}
-
-.above-average {
-	color: red;
-}
-
-.below-average {
-	color: green;
-}

@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeafletRouting", "LeafletRouting.csproj", "{168CE90D-12F4-4964-A76E-42635905692C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcGisServerRestApiWrapper", "ArcGisServerRestApiWrapper\ArcGisServerRestApiWrapper\ArcGisServerRestApiWrapper.csproj", "{6B33CDEE-5B6F-4F16-BC8E-D48D41CEEFE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{168CE90D-12F4-4964-A76E-42635905692C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{168CE90D-12F4-4964-A76E-42635905692C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{168CE90D-12F4-4964-A76E-42635905692C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B33CDEE-5B6F-4F16-BC8E-D48D41CEEFE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B33CDEE-5B6F-4F16-BC8E-D48D41CEEFE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B33CDEE-5B6F-4F16-BC8E-D48D41CEEFE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B33CDEE-5B6F-4F16-BC8E-D48D41CEEFE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

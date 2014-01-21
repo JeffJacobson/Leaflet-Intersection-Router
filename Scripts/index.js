@@ -76,6 +76,8 @@ require(["leaflet"], function (L) {
 			layers: [osmLayer]
 		}).locate({ setView: true, maxZoom: 16 });
 
+		window.theMap = map;
+
 		// Create the layer list control and add it to the map.
 		layerList = L.control.layers({
 			OpenStreetMap: osmLayer,
@@ -121,18 +123,23 @@ require(["leaflet"], function (L) {
 		return [baseUrl, params].join("?");
 	}
 
+	var handleGeocodeResult = function () {
+		var result;
+		console.log(arguments);
+		if (this.status === 200) {
+			result = JSON.parse(this.response);
+			L.marker([result.location.y, result.location.x]).addTo(map);
+			console.log(result);
+		}
+	};
+
 	/** Handles the mouse click event.
 	 * @param {MouseEvent} e
 	*/
 	function handleMapClick(e) {
+		console.log(e);
 		var req = new XMLHttpRequest();
-		req.onload = function () {
-			var result;
-			if (this.status === 200) {
-				result = JSON.parse(this.response);
-				console.log(result);
-			}
-		};
+		req.onload = handleGeocodeResult;
 		req.open("get", createReverseGeocodeRequestUrl(e.latlng));
 		req.send();
 	}
