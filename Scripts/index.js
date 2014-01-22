@@ -5,15 +5,32 @@
 requirejs.config({
 	baseUrl: "Scripts",
 	paths: {
-		leaflet: "//cdn.leafletjs.com/leaflet-0.7.1/leaflet"
-	}
+		"terraformer": "//cdn-geoweb.s3.amazonaws.com/terraformer/1.0.2/terraformer.min",
+		"terraformer-arcgis-parser": "//cdn-geoweb.s3.amazonaws.com/terraformer-arcgis-parser/1.0.1/terraformer-arcgis-parser.min"
+	},
+	shim: {
+		"terraformer": {
+			exports: "Terraformer"
+		},
+		"terraformer-arcgis-parser": {
+			deps: ["terraformer"],
+			exports: "Terraformer.ArcGIS"
+		}
+
+	},
+	packages: [
+		{
+			name: "leaflet",
+			location: "//cdn.leafletjs.com/leaflet-0.7.2",
+			main: "leaflet"
+		}
+	]
 });
 
-// Check to make sure the browser supports WebWorkers. If it doesn't, inform the user that they need to upgrade.
 require(["leaflet"], function (L) {
 	"use strict";
 
-	var map;
+	var map, stopsLayer;
 
 	function createMap() {
 
@@ -69,11 +86,13 @@ require(["leaflet"], function (L) {
 			maxZoom: 18
 		});
 
+		stopsLayer = L.geoJson();
+
 		// Create the map. If geolocation is supported, it will be zoomed to the user's current location.
 		map = L.map('map', {
 			center: [47.41322033015946, -120.80566406246835],
 			zoom: 7,
-			layers: [osmLayer]
+			layers: [osmLayer, stopsLayer]
 		}).locate({ setView: true, maxZoom: 16 });
 
 		window.theMap = map;
@@ -87,6 +106,8 @@ require(["leaflet"], function (L) {
 			"OpenCycleMap Transport": ocmTransportLayer,
 			"OpenCycleMap Landscape": ocmLandscapeLayer,
 			"OpenCycleMap Outdoors": ocmOutdoorsLayer
+		}, {
+			"Stops": stopsLayer
 		}).addTo(map);
 
 		return map;
@@ -123,13 +144,45 @@ require(["leaflet"], function (L) {
 		return [baseUrl, params].join("?");
 	}
 
+	/** @typedef {ArcGisSpatialReference}
+	 * @property {number} wkid
+	 * @property {number} latestWkid
+	 */
+
+	/** @typedef {ArcGisPoint}
+	 * @property {number} x
+	 * @property {number} y
+	 * @property {ArcGisSpatialReference} spatialReference
+	 */
+
+	/** @typedef {GeocodeResult}
+	 * @property {Object.<string, string>} address
+	 * @property {ArcGisPoint} location
+	 */
+
+	/**
+	 * @param {GeocodeResult} geocodeResult
+	 */
+	function geocodeResultToGeoJson(geocodeResult) {
+		var output = {
+			type: "Feature",
+			geometry: {
+				type: "Point",
+				coordinates: [geocodeResult.location.x, geocodeResult.location.y]
+			},
+			properties: geocodeResult.address
+		};
+		return output;
+	}
+
+	/**
+	 * @this {XMLHttpRequest}
+	 */
 	var handleGeocodeResult = function () {
 		var result;
-		console.log(arguments);
 		if (this.status === 200) {
 			result = JSON.parse(this.response);
-			L.marker([result.location.y, result.location.x]).addTo(map);
-			console.log(result);
+			stopsLayer.addData(geocodeResultToGeoJson(result));
 		}
 	};
 
@@ -137,7 +190,6 @@ require(["leaflet"], function (L) {
 	 * @param {MouseEvent} e
 	*/
 	function handleMapClick(e) {
-		console.log(e);
 		var req = new XMLHttpRequest();
 		req.onload = handleGeocodeResult;
 		req.open("get", createReverseGeocodeRequestUrl(e.latlng));
