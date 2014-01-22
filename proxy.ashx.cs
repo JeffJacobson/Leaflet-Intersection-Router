@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Esri.ArcGisServer.Rest.Authentication;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace GtfsJs
+namespace Proxy
 {
 	/// <summary>
 	/// Summary description for proxy
@@ -16,34 +18,52 @@ namespace GtfsJs
 		static readonly Regex allowedRe = new Regex(@"^(route.)?arcgis\.com$", RegexOptions.IgnoreCase);
 		static readonly Regex needsToken = new Regex(@"^route.arcgis.com$");
 
+		private static Token _token;
+
+		public static Token Token
+		{
+			get {
+				if (_token == null || !_token.IsValid)
+				{
+					var svc = new AuthenticationService();
+					_token = svc.GetToken(ConfigurationManager.AppSettings["ClientId"], ConfigurationManager.AppSettings["ClientSecret"]);
+				}
+				return _token; 
+			}
+		}
+
+
 		public void ProcessRequest(HttpContext context)
 		{
-			if (context.Request.UrlReferrer == null)
-			{
-				context.Response.ContentType = "text/plain";
-				context.Response.StatusCode = 403;
-				context.Response.Write("No Referrer is present.");
-				return;
+			////if (context.Request.UrlReferrer == null)
+			////{
+			////	context.Response.ContentType = "text/plain";
+			////	context.Response.StatusCode = 403;
+			////	context.Response.Write("No Referrer is present.");
+			////	return;
 
-			}
-			else if (string.Compare(context.Request.UrlReferrer.Host, context.Request.Url.Host, true) != 0)
-			{
-				context.Response.ContentType = "text/plain";
-				context.Response.StatusCode = 403;
-				context.Response.Write("The specified host is not permitted by this proxy.");
-				return;
-			}
+			////}
+			////else if (string.Compare(context.Request.UrlReferrer.Host, context.Request.Url.Host, true) != 0)
+			////{
+			////	context.Response.ContentType = "text/plain";
+			////	context.Response.StatusCode = 403;
+			////	context.Response.Write("The specified host is not permitted by this proxy.");
+			////	return;
+			////}
 
 			// Get the URL from the query string.
 			var url = context.Request.Url.Query.TrimStart('?');
 			if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
 			{
-				var uri = new Uri(url);
-				var uriBuilder = new UriBuilder(uri);
+				Uri uri = new Uri(url);
 
 				if (needsToken.IsMatch(uri.Host))
 				{
-					// TODO: Add the token.
+					var uriBuilder = new UriBuilder(url);
+					// Add the token.
+					uriBuilder.Query = string.Format("{0}&token={1}", uriBuilder.Query.TrimStart('?'), Token.AccessToken);
+
+					uri = uriBuilder.Uri;
 				}
 
 				if (!allowedRe.IsMatch(uri.Host))
@@ -72,6 +92,8 @@ namespace GtfsJs
 					resp = (HttpWebResponse)ex.Response;
 				}
 
+				CopyResponseHeaders(resp, context.Response);
+
 				context.Response.ContentType = resp.ContentType;
 				context.Response.StatusCode = (int)resp.StatusCode;
 
@@ -96,6 +118,18 @@ namespace GtfsJs
 			}
 		}
 
+		private void CopyResponseHeaders(HttpWebResponse source, HttpResponse destination)
+		{
+			Regex dontCopy = new Regex("^((Set-Cookie))$", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
+			foreach (string key in source.Headers.Keys)
+			{
+				if (!dontCopy.IsMatch(key))
+				{
+					destination.Headers.Add(key, source.Headers[key]);
+				}
+			}
+		}
+
 		/// <summary>
 		/// Copies the headers from an <see cref="HttpRequest"/> to a <see cref="WebRequest"/>.
 		/// </summary>
@@ -117,8 +151,8 @@ namespace GtfsJs
 				}
 
 				destination.Headers.Add(key, source.Headers[key]);
-
 			}
+			
 		}
 
 		public bool IsReusable
